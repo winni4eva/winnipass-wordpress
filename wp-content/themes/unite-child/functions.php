@@ -10,7 +10,8 @@
  * 
  * @return null
  */
-function my_theme_enqueue_styles() {
+function my_theme_enqueue_styles() 
+{
 
     $parent_style = 'unite-style';
     wp_enqueue_style($parent_style, get_template_directory_uri() . '/style.css');
@@ -29,7 +30,8 @@ add_action('wp_enqueue_scripts', 'my_theme_enqueue_styles');
  * 
  * @return null
  */
-function create_films_posttype() {
+function create_films_posttype() 
+{
     $labels = array(
         'name' => _x('Films', 'film general name'),
         'singular_name' => _x('Film', 'film singular name'),
@@ -46,10 +48,12 @@ function create_films_posttype() {
     );
 
     $supports = array(
+        'title',
         'editor',
         'author',
         'custom-fields',
-        'post-formats'
+        'post-formats',
+        'thumbnail'
     );
 
     $details = array(
@@ -71,7 +75,8 @@ add_action('init', 'create_films_posttype', 0);
  * 
  * @return null
  */
-function create_film_genre_taxonomy() {
+function create_film_genre_taxonomy() 
+{
  
     $labels = array(
       'name' => _x('Genre', 'film genre'),
@@ -107,7 +112,8 @@ add_action('init', 'create_film_genre_taxonomy', 0);
  * 
  * @return null
  */
-function create_film_country_taxonomy() {
+function create_film_country_taxonomy() 
+{
  
     $labels = array(
       'name' => _x('Country', 'film country'),
@@ -144,7 +150,8 @@ add_action('init', 'create_film_country_taxonomy', 0);
  * 
  * @return null
  */
-function create_film_year_taxonomy() {
+function create_film_year_taxonomy() 
+{
  
     $labels = array(
       'name' => _x('Year', 'film year'),
@@ -180,7 +187,8 @@ add_action('init', 'create_film_year_taxonomy', 0);
  * 
  * @return null
  */
-function create_film_actor_taxonomy() {
+function create_film_actor_taxonomy() 
+{
  
     $labels = array(
       'name' => _x('Actors', 'film actor'),
@@ -212,7 +220,7 @@ function create_film_actor_taxonomy() {
 add_action('init', 'create_film_actor_taxonomy', 0);
 
 /**
- * Register our film tiicket price custom meta box.
+ * Register our film ticket price custom meta box.
  * 
  * @return null
  */
@@ -230,13 +238,20 @@ function ticket_price_meta_box()
 
 function ticket_price_meta_box_field()  
 {  
-    echo '<input type="text" id="ticket_price" name="ticket_price"/>';    
+    global $post;
+
+    $data = get_post_custom($post->ID);
+    $val = isset($data['ticket_price'])
+                ? esc_attr($data['ticket_price'][0])
+                : 'no value';
+
+    echo '<input type="text" id="ticket_price" name="ticket_price" value="'.$val.'"/>';    
 } 
 
 add_action('add_meta_boxes', 'ticket_price_meta_box');
 
 /**
- * Register our film tiicket price custom meta box.
+ * Register our film release date custom meta box.
  * 
  * @return null
  */
@@ -254,7 +269,33 @@ function release_date_meta_box()
 
 function release_date_meta_box_field()  
 {  
-    echo '<input type="text" id="release_date" name="release_date"/>';    
+    global $post;
+
+    $data = get_post_custom($post->ID);
+    $val = isset($data['release_date'])
+                ? esc_attr($data['release_date'][0])
+                : 'no value';
+
+    echo '<input type="text" id="release_date" name="release_date" value="'.$val.'"/>';    
 } 
 
 add_action('add_meta_boxes', 'release_date_meta_box');
+
+
+/**
+ * Save custom field data in database.
+ * 
+ * @return null
+ */
+function save_detail() 
+{
+    global $post;
+    if (define('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        return $post->ID;
+    }
+
+    update_post_meta($post->ID, "release_date", $_POST['release_date']);
+    update_post_meta($post->ID, "ticket_price", $_POST['ticket_price']);
+}
+
+add_action('save_post', 'save_detail');
