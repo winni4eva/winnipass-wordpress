@@ -299,3 +299,39 @@ function save_detail()
 }
 
 add_action('save_post', 'save_detail');
+
+
+/**
+ * Film list header filter hook.
+ * 
+ * @return null
+ */
+function film_list_table_head( $defaults ) 
+{
+    $defaults['ticket_price']  = 'Ticket Price';
+    $defaults['release_date']    = 'Release Date';
+    return $defaults;
+}
+
+add_filter('manage_film_posts_columns', 'film_list_table_head');
+
+
+
+/**
+ * Film list data filter hook.
+ * 
+ * @return null
+ */
+function film_list_table_content( $column_name, $post_id ) 
+{
+
+    if ($column_name == 'ticket_price') {
+        echo get_post_meta($post_id, 'ticket_price', true);
+    }
+
+    if ($column_name == 'release_date') {
+        echo get_post_meta($post_id, 'release_date', true);
+    }
+}
+
+add_action( 'manage_film_posts_custom_column', 'film_list_table_content', 10, 2 );
