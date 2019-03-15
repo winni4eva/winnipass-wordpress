@@ -74,7 +74,7 @@ add_action('init', 'create_films_posttype', 0);
 function create_film_genre_taxonomy() {
  
     $labels = array(
-      'name' => _x('Genres', 'film genre'),
+      'name' => _x('Genre', 'film genre'),
       'singular_name' => _x('Genre', 'film singular name'),
       'search_items' =>  __('Search Genres'),
       'all_items' => __('All Genres'),
@@ -110,7 +110,7 @@ add_action('init', 'create_film_genre_taxonomy', 0);
 function create_film_country_taxonomy() {
  
     $labels = array(
-      'name' => _x('Countries', 'film country'),
+      'name' => _x('Country', 'film country'),
       'singular_name' => _x('Country', 'country singular name'),
       'search_items' =>  __('Search Countries'),
       'all_items' => __('All Countries'),
@@ -147,7 +147,7 @@ add_action('init', 'create_film_country_taxonomy', 0);
 function create_film_year_taxonomy() {
  
     $labels = array(
-      'name' => _x('Years', 'film year'),
+      'name' => _x('Year', 'film year'),
       'singular_name' => _x('Year', 'year singular name'),
       'search_items' =>  __('Search Year'),
       'all_items' => __('All Years'),
