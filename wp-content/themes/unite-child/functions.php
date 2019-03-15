@@ -53,7 +53,8 @@ function create_films_posttype()
         'author',
         'custom-fields',
         'post-formats',
-        'thumbnail'
+        'thumbnail',
+        'comments'
     );
 
     $details = array(
@@ -335,3 +336,35 @@ function film_list_table_content( $column_name, $post_id )
 }
 
 add_action( 'manage_film_posts_custom_column', 'film_list_table_content', 10, 2 );
+
+
+/**
+ * Film list shortcode.
+ * 
+ * @return null
+ */
+function film_list_last_five( $atts, $content, $tag ) 
+{
+    $args = array(
+        'post_type' => 'film',
+        'post_status' => 'publish',
+        'posts_per_page' => 5
+    );
+
+    $string = '';
+    $query = new WP_Query( $args );
+
+    if ($query->have_posts()) {
+        $string .= '<ul>';
+        while( $query->have_posts() ){
+            $query->the_post();
+            $string .= '<li>' . get_the_title() . '</li>';
+        }
+        $string .= '</ul>';
+    }
+    wp_reset_postdata();
+    return $string;
+}
+
+add_shortcode('last_five', 'film_list_last_five');
+
