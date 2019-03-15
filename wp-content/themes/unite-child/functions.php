@@ -210,3 +210,51 @@ function create_film_actor_taxonomy() {
 }
 
 add_action('init', 'create_film_actor_taxonomy', 0);
+
+/**
+ * Register our film tiicket price custom meta box.
+ * 
+ * @return null
+ */
+function ticket_price_meta_box()
+{
+    add_meta_box( 
+        'ticket_price_01', 
+        'Ticket Price', 
+        'ticket_price_meta_box_field', 
+        'film', 
+        'normal', 
+        'high' 
+    );
+}
+
+function ticket_price_meta_box_field()  
+{  
+    echo '<input type="text" id="ticket_price" name="ticket_price"/>';    
+} 
+
+add_action('add_meta_boxes', 'ticket_price_meta_box');
+
+/**
+ * Register our film tiicket price custom meta box.
+ * 
+ * @return null
+ */
+function release_date_meta_box()
+{
+    add_meta_box( 
+        'release_date_01', 
+        'Release Date', 
+        'release_date_meta_box_field', 
+        'film', 
+        'normal', 
+        'high' 
+    );
+}
+
+function release_date_meta_box_field()  
+{  
+    echo '<input type="text" id="release_date" name="release_date"/>';    
+} 
+
+add_action('add_meta_boxes', 'release_date_meta_box');
